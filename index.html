@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Rive (JS) Quick Start</title>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas
+      style="
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: black;
+      "
+      id="rive-canvas"
+    ></canvas>
+
+    <script src="https://unpkg.com/@rive-app/canvas@latest"></script>
+    <script>
+      // ---------------------------------
+      // The layout of the graphic will adhere to
+      const layout = new rive.Layout({
+        fit: rive.Fit.Layout, // Setting to Fit.Layout will auto update the artboard size
+        layoutScaleFactor: 0.9, // change this to resize the layout as needed.
+      });
+
+      // ---------------------------------
+      // HTML Canvas element to render to
+      const riveCanvas = document.getElementById("rive-canvas");
+
+      function computeSize() {
+        riveInstance.resizeDrawingSurfaceToCanvas(1);
+      }
+
+      // Subscribe to window size changes and update call `resizeDrawingSurfaceToCanvas`
+      window.onresize = computeSize;
+
+      // Subscribe to devicePixelRatio changes and call `resizeDrawingSurfaceToCanvas`
+      window
+        .matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
+        .addEventListener("change", computeSize);
+
+
+
+      const riveInstance = new rive.Rive({
+        // Load a local riv
+        src: "layouts_demo.riv",
+        // Be sure to specify the correct state machine
+        stateMachines: "State Machine 1", // Name of the State Machine to play
+        canvas: riveCanvas,
+        // artboard: "Artboard" // Optionally provide the artboard to display
+        layout: layout, // This is optional. Provides additional layout control.
+        autoplay: true,
+        onLoad: () => {
+          // Prevent a blurry canvas by using the device pixel ratio
+          riveInstance.resizeDrawingSurfaceToCanvas();
+        },
+      });
+    </script>
+  </body>
+</html>
+
+
+
